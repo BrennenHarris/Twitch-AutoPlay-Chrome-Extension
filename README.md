@@ -9,8 +9,7 @@ To install:
   7. Pin Extension
   8. Enjoy!
 
-HOW TO USE:
-To Create List:
+How To Use (Create List):
 1. Click "Edit List"
 2. Click "Create New" and title your new list.
 3. Select the list from the drop-down
