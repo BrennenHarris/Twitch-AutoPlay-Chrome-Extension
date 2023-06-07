@@ -1,0 +1,33 @@
+{
+    "name": "Twitch AutoPlay",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": [
+      "tabs",
+      "activeTab",
+      "storage",
+      "http://*/*",
+      "https://*/*"
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_title": "My Extension",
+      "icon": {
+        "16": "16_stopped.png",
+        "48": "16_stopped.png",
+        "128": "16_stopped.png"
+      },
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["content.js"]
+    },
+    "oauth2": {
+      "client_id": "qk5a5h8f77uhovcwlojxmlk9h2cdmp",
+      "scopes": ["user:read:follows"]
+    },
+    "background":{
+      "service_worker": "background.js"
+    }
+  }
+  

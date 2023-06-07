@@ -1,0 +1,18 @@
+TODO:
+
+\\TWITCH AUTOPLAY//
+	1. Create a visual tracker for if running or not
+	2. If no stream online, load most viewed/highest followed
+	3. UI button Updates
+	4. Auto playlists
+
+\\MUSIC APP//
+	1. UI Makeover, button updates
+	2. Visualizer
+	3. Maybe update to bass
+
+\\NBA GM APP//
+	1. Create data diagram for classes
+
+
+		

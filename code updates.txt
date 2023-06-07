@@ -1,0 +1,19 @@
+Code Updates Bugs and fixes:
+
+
+- Update intervals, if same stream is loaded wait longer, if initial wait shorter.
+- If no live streams, load highest viewed follower or most watched streamer.
+- Use twitch api to see if person is online
+- Fix pause and resume after pause
+
+
+UI:
+-Add list function: User inputs streamer "xqc"
+			-Ability to move up and down for priority
+- Fix remove issue
+
+
+
+TOP PRIO:
+-Setup git repository
+-Get list from local storage and use in background code
