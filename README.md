@@ -10,11 +10,13 @@ To install:
   8. Enjoy!
 
 HOW TO USE:
-  Create List:
-    1. Click "Edit List"
-    2. Click "Create New" and title your new list.
-    3. Select the list from the drop-down
-    4. Begin adding twitch usernames in the form "xqc".
-    5. Save
-    6. You can now select your list and auto playing streams!
+To Create List:
+1. Click "Edit List"
+2. Click "Create New" and title your new list.
+3. Select the list from the drop-down
+4. Begin adding twitch usernames in the form "xqc".
+5. Save
+6. You can now select your list and auto playing streams!
+
+    
     
