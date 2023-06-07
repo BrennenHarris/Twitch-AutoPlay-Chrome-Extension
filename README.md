@@ -15,7 +15,7 @@ How To Use (Create List):
 3. Select the list from the drop-down
 4. Begin adding twitch usernames in the form "xqc".
 5. Save
-6. You can now select your list and auto playing streams!
+6. You can now select your list and begin auto playing streams!
 
     
     
