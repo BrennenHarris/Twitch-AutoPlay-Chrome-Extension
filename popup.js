@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var playFollowed = document.getElementById("followedButton");
 
-  var authoBTN = document.getElementById("authoBTN");
+  //var authoBTN = document.getElementById("authoBTN");
 
   var createButton = document.getElementById("newButton");
   var deletePButton = document.getElementById("deletePlaylist");
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   editListButton.addEventListener("click", openList);
   backButton.addEventListener("click", openList);
-  saveButton.addEventListener("click", saveList);
+  saveButton.addEventListener("click", saveListManually);
   addButton.addEventListener("click", function () {
     openModal("listString");
   });
@@ -231,7 +231,7 @@ function createListItem(value) {
 }
 
 //Saves list locally
-function saveList() {
+async function saveList() {
   var selectMenu = document.getElementById("playlist");
   var selectedOption = selectMenu.options[selectMenu.selectedIndex];
   var key = selectedOption.text;
@@ -246,12 +246,33 @@ function saveList() {
   }
 
   // Save the list to local storage
-  chrome.storage.local.set({ [key]: list }, function () {
+  await chrome.storage.local.set({ [key]: list }, function () {
     console.log("List saved:", list);
-
-    // Send a message to background.js indicating that the list has been updated
-    chrome.runtime.sendMessage({ action: "listUpdated", [key]: list });
   });
+  // Send a message to background.js indicating that the list has been updated
+  chrome.runtime.sendMessage({ action: "listUpdate", mylist: list });
+}
+
+async function saveListManually() {
+  var selectMenu = document.getElementById("playlist");
+  var selectedOption = selectMenu.options[selectMenu.selectedIndex];
+  var key = selectedOption.text;
+  var ul = document.getElementById("playlistItems");
+  var items = ul.getElementsByTagName("li");
+
+  var list = [];
+  for (var i = 0; i < items.length; i++) {
+    // Get the text content of the list item, excluding the button names
+    var listItemText = items[i].childNodes[0].innerHTML.trim();
+    list.push(listItemText);
+  }
+
+  // Save the list to local storage
+  await chrome.storage.local.set({ [key]: list }, function () {
+    console.log("List saved:", list);
+  });
+  // Send a message to background.js indicating that the list has been updated
+  chrome.runtime.sendMessage({ action: "manualListUpdate", mylist: list });
 }
 
 function getListLocally(key, callback) {

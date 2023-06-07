@@ -5,6 +5,7 @@ var isChecking = false; // Flag to track if live check is in progress
 var waitTime = 1000;
 var originalWindow = -1;
 var currentUserAccessToken;
+var originalTab;
 
 chrome.storage.local.get(["myList"], function (result) {
   var myList = result.myList || [];
@@ -137,21 +138,49 @@ async function loadURL(arrayURL) {
   loadedURL = arrayURL;
 
   // Send message to content script with the URL to load
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    const activeTab = tabs[0];
-    chrome.tabs.update(activeTab.id, { url: `https://${arrayURL}` });
-  });
+  await chrome.tabs.query(
+    { active: true, currentWindow: true },
+    function (tabs) {
+      const activeTab = tabs[0];
+
+      //If the originalTab var hasnt been set, set it
+      try {
+        if (typeof originalTab === "undefined") {
+          originalTab = activeTab;
+          chrome.tabs.update(originalTab.id, { url: `https://${arrayURL}` });
+        } else {
+          chrome.tabs.get(originalTab.id, function (tab) {
+            if (chrome.runtime.lastError || !tab) {
+              chrome.tabs.create(
+                { url: `https://${arrayURL}` },
+                function (tab) {
+                  const tabId = tab.id;
+                  originalTab = tab;
+                  chrome.tabs.sendMessage(
+                    tabId,
+                    { action: "loadUrl", url: `https://${arrayURL}` },
+                    function (response) {
+                      //console.log(response.status);
+                    }
+                  );
+                }
+              );
+            } else {
+              chrome.tabs.update(originalTab.id, {
+                url: `https://${arrayURL}`,
+              });
+            }
+          });
+        }
+      } catch (error) {
+        console.log("Failed to load url " + error);
+      }
+    }
+  );
 
   clearInterval(intervalId); // Clear the interval
   intervalId = setInterval(liveCheck, 5000); // Set a higher interval (20000 ms) for the next check
   count = 0;
-}
-
-async function getCurrentTab() {
-  let queryOptions = { active: true, currentWindow: true };
-  // `tab` will either be a `tabs.Tab` instance or `undefined`.
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return tab;
 }
 
 async function startFollowerList() {
@@ -251,8 +280,17 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     stopLiveCheck();
     sendResponse({ status: "success" });
   } else if (message.action === "listUpdated") {
-    streamURLS = message.mylist;
-    //onsole.log(result);
+    if (!isChecking) {
+      streamURLS = message.mylist;
+    }
+  } else if (message.action === "manualListUpdate") {
+    if (isChecking) {
+      stopLiveCheck();
+      streamURLS = message.mylist;
+      startLiveCheck();
+    } else {
+      streamURLS = message.mylist;
+    }
   } else if (message.action === "authoUser") {
     setUsersAPI();
     //console.log(result);
