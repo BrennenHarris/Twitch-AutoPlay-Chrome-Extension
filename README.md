@@ -1,5 +1,5 @@
 # Twitch-AutoPlay-Chrome-Extension
-To istall:
+To install:
   1. Download files as zip
   2. Unzip
   3. In chrome, Go to Extensions -> Manage Extensions
