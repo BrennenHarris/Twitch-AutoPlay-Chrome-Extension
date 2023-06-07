@@ -1,4 +1,8 @@
 # Twitch-AutoPlay-Chrome-Extension
+Do you like having twitch streams on for background noise? Do you want your favorite streamer to automatically load if they go live? Or are you just so lazy you cant be bothered to select another stream if the current stream goes offline.....sadge.... 
+If you said yes, maybe or no to any of these questions, this is the extension for you!!!!
+
+
 To install:
   1. Download files as zip
   2. Unzip
