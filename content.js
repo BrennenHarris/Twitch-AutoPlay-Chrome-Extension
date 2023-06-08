@@ -4,6 +4,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     loadUrl(message.url);
     sendResponse({ status: "success" });
   }
+  if (message.action === "closeTab") {
+    loadUrl(message.url);
+    sendResponse({ status: "success" });
+  }
 });
 
 // Function to load the received URL

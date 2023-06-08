@@ -18,9 +18,11 @@ async function setUsersAPI() {
     chrome.storage.sync.get(["api"], function (result) {
       const userApi = result.api;
       if (userApi) {
+        console.log("Access Token Set");
         currentUserAccessToken = userApi;
         resolve(currentUserAccessToken);
       } else {
+        console.log("Getting New Access Token");
         getUserAPI()
           .then((accessToken) => resolve(accessToken))
           .catch((error) => reject(error));
@@ -46,6 +48,7 @@ async function getUserAPI() {
 }
 
 function saveAccessToken(accessToken) {
+  //console.log("Saving Access Code To Storage: " + accessToken);
   chrome.storage.sync.set({ api: accessToken }, function () {});
 }
 
@@ -69,32 +72,36 @@ function stopLiveCheck() {
 }
 
 async function liveCheck() {
-  if (!isChecking) {
-    return; // Stop live check if flag is false
-  }
-  if (count >= streamURLS.length) {
-    count = 0;
-  }
+  try {
+    if (!isChecking) {
+      return; // Stop live check if flag is false
+    }
+    if (count >= streamURLS.length) {
+      count = 0;
+    }
 
-  chrome.runtime.sendMessage({
-    action: "changePlayingIMG",
-    changing: true,
-    currentURL: loadedURL,
-  });
+    chrome.runtime.sendMessage({
+      action: "changePlayingIMG",
+      changing: true,
+      currentURL: loadedURL,
+    });
 
-  const isStreamLive = await isLive(streamURLS[count]);
+    console.log("Checking if live: " + streamURLS[count]);
+    const isStreamLive = await isLive(streamURLS[count]);
 
-  if (isStreamLive) {
-    console.log("loading " + streamURLS[count]);
-    loadURL(streamURLS[count]);
-  } else {
-    clearInterval(intervalId); // Clear the interval
-    intervalId = setInterval(liveCheck, 1000); // Set a higher interval (20000 ms) for the next check
-    count++;
-    console.log("Now checking " + streamURLS[count]);
+    if (isStreamLive) {
+      console.log("loading " + streamURLS[count]);
+      loadURL(streamURLS[count]);
+    } else {
+      clearInterval(intervalId); // Clear the interval
+      intervalId = setInterval(liveCheck, 1000); // Set a higher interval (20000 ms) for the next check
+      count++;
+      console.log("Now checking " + streamURLS[count]);
+    }
+  } catch (error) {
+    console.log("Empty Stream List ERROR: " + error);
   }
 }
-
 async function isLive(arrayURL) {
   // Extract the channel name from the URL
   const channelName = arrayURL.replace("twitch.tv/", "");
@@ -253,13 +260,22 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     console.log("New URL:", changeInfo.url);
     const url = new URL(changeInfo.url);
     if (url.hash && url.hash.includes("access_token")) {
+      console.log("Access Token Found in URL");
       const fragmentParams = new URLSearchParams(url.hash.slice(1));
       const accessToken = fragmentParams.get("access_token");
       if (accessToken != currentUserAccessToken) {
         saveAccessToken(accessToken);
         currentUserAccessToken = accessToken;
+      } else {
+        console.log("Access token already exists");
       }
-      //console.log("Access Token:", accessToken);
+      // Get the current tab ID
+      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        var currentTabId = tabs[0].id;
+
+        // Close the current tab
+        chrome.tabs.remove(currentTabId);
+      });
     } else {
       console.log("URL does not contain access token.");
     }
