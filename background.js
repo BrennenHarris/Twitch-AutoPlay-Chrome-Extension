@@ -7,12 +7,14 @@ var originalWindow = -1;
 var currentUserAccessToken;
 var originalTab;
 
+//Retrieves list
 chrome.storage.local.get(["myList"], function (result) {
   var myList = result.myList || [];
   streamURLS = myList;
   // Use the list in your background script as needed
 });
 
+//Attempts to retrieve API from chrome local storage
 async function setUsersAPI() {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.get(["api"], function (result) {
@@ -31,6 +33,7 @@ async function setUsersAPI() {
   });
 }
 
+//Gets new API from url
 async function getUserAPI() {
   const apiURL =
     "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=qk5a5h8f77uhovcwlojxmlk9h2cdmp&redirect_uri=https://www.twitch.tv/&scope=user%3Aread%3Afollows&state=shootlikekd35";
@@ -47,11 +50,13 @@ async function getUserAPI() {
   });
 }
 
+//Saves API to chrome storage
 function saveAccessToken(accessToken) {
   //console.log("Saving Access Code To Storage: " + accessToken);
   chrome.storage.sync.set({ api: accessToken }, function () {});
 }
 
+//Runs initial check, and begins timer
 async function startLiveCheck() {
   if (isChecking) {
     stopLiveCheck();
@@ -64,6 +69,7 @@ async function startLiveCheck() {
   intervalId = setInterval(liveCheck, waitTime); // Check every 5 seconds
 }
 
+//Stops check and resets variables
 function stopLiveCheck() {
   isChecking = false;
   count = 0;
@@ -71,6 +77,7 @@ function stopLiveCheck() {
   clearInterval(intervalId); // Clear the interval
 }
 
+//iterates through array to check if streams are live
 async function liveCheck() {
   try {
     if (!isChecking) {
@@ -102,6 +109,8 @@ async function liveCheck() {
     console.log("Empty Stream List ERROR: " + error);
   }
 }
+
+//Checks if stream is online using twitch API
 async function isLive(arrayURL) {
   // Extract the channel name from the URL
   const channelName = arrayURL.replace("twitch.tv/", "");
@@ -135,6 +144,9 @@ async function isLive(arrayURL) {
     return false;
   }
 }
+
+//Attampts to open the url if it was live.
+//If no tab has been set will load in current tab, if tab has been set will load in that tab, if tab has been closed will create new tab
 async function loadURL(arrayURL) {
   if (loadedURL === arrayURL) {
     count = 0;
@@ -190,6 +202,7 @@ async function loadURL(arrayURL) {
   count = 0;
 }
 
+//Function to grabe users follower list.
 async function startFollowerList() {
   streamURLS = await getFollowerList();
   chrome.runtime.sendMessage({
@@ -231,6 +244,7 @@ async function getFollowerList() {
   }
 }
 
+//Returns streamer id information using API
 async function getStreamerID() {
   await setUsersAPI();
   try {
@@ -254,6 +268,7 @@ async function getStreamerID() {
   }
 }
 
+//Will check if new tab has a twitch API
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.url && tab.active) {
     // URL of the active tab has changed

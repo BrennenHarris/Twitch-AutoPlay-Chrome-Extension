@@ -1,0 +1,206 @@
+html,body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #292929;
+  color: white;
+  font-family: Arial, sans-serif;
+  max-width: 100%;
+}
+
+h1 {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding: 10px;
+  color: #9147ff;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+#playlist {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #292929;
+  color: white;
+  border: 1px solid gray;
+  outline: none;
+  margin: 5px;
+}
+
+#editListButton {
+  margin-top: 10px;
+  background-color: #9147ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#editListButton:hover {
+  background-color: #7539cc;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+#playingMonitorContainer {
+  display: flex;
+  flex-direction: right;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+}
+#playingIMG {
+  margin: 5px;
+}
+
+#loadButton,
+#followedButton,
+#stopButton,
+.list-button {
+  background-color: #9147ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+#loadButton:hover,
+#followedButton:hover,
+#stopButton:hover,
+.list-button:hover {
+  background-color: #7539cc;
+}
+
+#listContainer {
+  display: none;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  overflow-y: auto;
+  height: 100%;
+}
+
+ul#playlistItems li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 3px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  background-color: #292929;
+  color: white;
+  /* max-width: 80%;*/
+}
+
+ul#playlistItems {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  list-style-type: none;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.text-column {
+  flex: 1;
+  padding-right: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.buttons-column {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.trash-column {
+  display: flex;
+  align-items: center;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #292929;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #9147ff;
+  width: 300px;
+  color: white;
+  max-width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #9147ff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#valueInputM {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  background-color: #292929;
+  color: white;
+  border: 1px solid #9147ff;
+  outline: none;
+}
+
+#saveModalButton,
+#cancelModalButton {
+  background-color: #9147ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#saveModalButton:hover,
+#cancelModalButton:hover {
+  background-color: #7539cc;
+}
